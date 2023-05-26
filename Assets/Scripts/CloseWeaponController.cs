@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class CloseWeaponController : MonoBehaviour
-{
-  
+{ 
 
     //현재 장착된 핸드형 타입 무기
     [SerializeField]
@@ -15,7 +15,16 @@ public abstract class CloseWeaponController : MonoBehaviour
     protected bool isSwing = false;
     protected RaycastHit hitInfo;
 
+    //필요 컴포넌트
+    protected PlayerController thePlayerController;
 
+
+    void Start()
+    {
+        Debug.Log("### Start ###");
+        thePlayerController = FindObjectOfType<PlayerController>();
+        Debug.Log(thePlayerController);
+    }
 
     protected void TryAttack()
     {
@@ -23,29 +32,52 @@ public abstract class CloseWeaponController : MonoBehaviour
         {
             if (!isAttack)
             {
+                if(CheckObject())
+                {
+                    if(currentCloseWeapon.isAxe && hitInfo.transform.tag == "Tree")
+                    {
+                        Debug.Log("### TryAttack_ThePlayerControoler");
+                        Debug.Log(thePlayerController);
+                        Debug.Log("### GetTreeCenterPosition");
+                        Debug.Log(hitInfo.transform.GetComponent<TreeComponent>().GetTreeCenterPosition());
+                        StartCoroutine(thePlayerController.TreeLookCoroutine(hitInfo.transform.GetComponent<TreeComponent>().GetTreeCenterPosition()));
+                        //코루틴 실행
+                        StartCoroutine(AttackCoroutine("Chop",
+                                                       currentCloseWeapon.workDelayA,
+                                                       currentCloseWeapon.workDelayB,
+                                                       currentCloseWeapon.workDelay));
+
+                        return;
+                    }
+                }
+
+
                 //코루틴 실행
-                StartCoroutine(AttackCoroutine());
+                StartCoroutine(AttackCoroutine("Attack", 
+                                               currentCloseWeapon.attackDelayA , 
+                                               currentCloseWeapon.attackDelayB, 
+                                               currentCloseWeapon.attackDelay));
             }
         }
 
     }
 
-    protected IEnumerator AttackCoroutine()
+    protected IEnumerator AttackCoroutine(string _swingType, float _delayA, float _delayB, float _delayC)
     {
         isAttack = true;
 
-        currentCloseWeapon.anim.SetTrigger("Attack");
+        currentCloseWeapon.anim.SetTrigger(_swingType);
 
-        yield return new WaitForSeconds(currentCloseWeapon.attackDelayA);
+        yield return new WaitForSeconds(_delayA);
         isSwing = true;
 
         //공격 활성화 시점
         StartCoroutine(HItCoroutine());
 
-        yield return new WaitForSeconds(currentCloseWeapon.attackDelayB);
+        yield return new WaitForSeconds(_delayB);
         isSwing = false;
 
-        yield return new WaitForSeconds(currentCloseWeapon.attackDelay - currentCloseWeapon.attackDelayA - currentCloseWeapon.attackDelayB);
+        yield return new WaitForSeconds(_delayC - _delayA - _delayB);
         isAttack = false;
     }
 
