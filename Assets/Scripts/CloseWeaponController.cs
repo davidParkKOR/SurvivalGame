@@ -21,9 +21,7 @@ public abstract class CloseWeaponController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("### Start ###");
         thePlayerController = FindObjectOfType<PlayerController>();
-        Debug.Log(thePlayerController);
     }
 
     protected void TryAttack()
@@ -36,10 +34,7 @@ public abstract class CloseWeaponController : MonoBehaviour
                 {
                     if(currentCloseWeapon.isAxe && hitInfo.transform.tag == "Tree")
                     {
-                        Debug.Log("### TryAttack_ThePlayerControoler");
-                        Debug.Log(thePlayerController);
-                        Debug.Log("### GetTreeCenterPosition");
-                        Debug.Log(hitInfo.transform.GetComponent<TreeComponent>().GetTreeCenterPosition());
+       
                         StartCoroutine(thePlayerController.TreeLookCoroutine(hitInfo.transform.GetComponent<TreeComponent>().GetTreeCenterPosition()));
                         //코루틴 실행
                         StartCoroutine(AttackCoroutine("Chop",
@@ -65,7 +60,6 @@ public abstract class CloseWeaponController : MonoBehaviour
     protected IEnumerator AttackCoroutine(string _swingType, float _delayA, float _delayB, float _delayC)
     {
         isAttack = true;
-
         currentCloseWeapon.anim.SetTrigger(_swingType);
 
         yield return new WaitForSeconds(_delayA);

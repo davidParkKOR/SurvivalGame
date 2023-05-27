@@ -81,7 +81,6 @@ public class TreeComponent : MonoBehaviour
 
     void AngleCalc(float _angleY)
     {
-        Debug.Log(_angleY);
 
         if (0 <= _angleY && _angleY <= 70)
             DestroyPiece(2);
@@ -146,8 +145,6 @@ public class TreeComponent : MonoBehaviour
 
     public Vector3 GetTreeCenterPosition()
     {
-        Debug.Log(go_treeCenter);
-        Debug.Log(go_treeCenter.transform.position);
 
         return go_treeCenter.transform.position;
     }

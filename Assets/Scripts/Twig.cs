@@ -104,8 +104,6 @@ public class Twig : MonoBehaviour
 
     void CheckDirection(Vector3 _rotationDir)
     {
-        Debug.Log(_rotationDir);
-
     
         if(_rotationDir.y > 180)
         {
