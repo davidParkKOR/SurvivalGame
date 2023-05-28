@@ -26,34 +26,39 @@ public abstract class CloseWeaponController : MonoBehaviour
 
     protected void TryAttack()
     {
-        if (Input.GetButton("Fire1"))
-        {
-            if (!isAttack)
+        //인벤토리 활성화시 공격 금지 
+        if(!Inventory.inventoryActivated)
+        {            
+            if (Input.GetButton("Fire1"))
             {
-                if(CheckObject())
+                if (!isAttack)
                 {
-                    if(currentCloseWeapon.isAxe && hitInfo.transform.tag == "Tree")
+                    if (CheckObject())
                     {
-       
-                        StartCoroutine(thePlayerController.TreeLookCoroutine(hitInfo.transform.GetComponent<TreeComponent>().GetTreeCenterPosition()));
-                        //코루틴 실행
-                        StartCoroutine(AttackCoroutine("Chop",
-                                                       currentCloseWeapon.workDelayA,
-                                                       currentCloseWeapon.workDelayB,
-                                                       currentCloseWeapon.workDelay));
+                        if (currentCloseWeapon.isAxe && hitInfo.transform.tag == "Tree")
+                        {
 
-                        return;
+                            StartCoroutine(thePlayerController.TreeLookCoroutine(hitInfo.transform.GetComponent<TreeComponent>().GetTreeCenterPosition()));
+                            //코루틴 실행
+                            StartCoroutine(AttackCoroutine("Chop",
+                                                           currentCloseWeapon.workDelayA,
+                                                           currentCloseWeapon.workDelayB,
+                                                           currentCloseWeapon.workDelay));
+
+                            return;
+                        }
                     }
+
+
+                    //코루틴 실행
+                    StartCoroutine(AttackCoroutine("Attack",
+                                                   currentCloseWeapon.attackDelayA,
+                                                   currentCloseWeapon.attackDelayB,
+                                                   currentCloseWeapon.attackDelay));
                 }
-
-
-                //코루틴 실행
-                StartCoroutine(AttackCoroutine("Attack", 
-                                               currentCloseWeapon.attackDelayA , 
-                                               currentCloseWeapon.attackDelayB, 
-                                               currentCloseWeapon.attackDelay));
             }
         }
+
 
     }
 
