@@ -17,17 +17,20 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     [SerializeField]
     private GameObject go_CountImage;
 
+    [SerializeField] private bool isQuickSlot; //큌슬롯 여부 판단
+    [SerializeField] private int quickSlotNumber; //퀵슬롯 번호
+
     private ItemEffectDatabase theItemEffectDatabase;
-    private Rect baseRect;
+
+    [SerializeField] private RectTransform baseRect; // 인벤토리 영역
+    [SerializeField] private RectTransform quickSlotBaseRect; //퀵슬롯 영역
     private InputNumber theInputNumber;
 
     private void Start()
     {
-        baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;       
         theInputNumber = FindObjectOfType<InputNumber>();
         theItemEffectDatabase = FindObjectOfType<ItemEffectDatabase>();
     }
-
 
 
     //알파값 변경
@@ -57,6 +60,11 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         }
 
         SetColor(1);
+    }
+
+    public int GetQuickSlotNumber()
+    {
+        return quickSlotNumber;
     }
 
     //아이템 갯수 조절
@@ -100,7 +108,8 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(item !=null)
+        
+        if(item !=null && Inventory.inventoryActivated)
         {
             DragSlot.instance.dragSlot = this;
             DragSlot.instance.DragSetImage(itemIamge);
@@ -123,18 +132,18 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     //드래그 끝날떄 실행
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(DragSlot.instance.transform.localPosition.x < baseRect.xMin ||
-           DragSlot.instance.transform.localPosition.x > baseRect.xMax ||
-           DragSlot.instance.transform.localPosition.y < baseRect.yMin ||
-           DragSlot.instance.transform.localPosition.y > baseRect.yMax)
-        {
-            //Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,
-            //           theWeaponManager.transform.position + theWeaponManager.transform.forward,
-            //           Quaternion.identity);
-            //DragSlot.instance.dragSlot.ClearSlot();
 
-            if(DragSlot.instance.dragSlot != null)
+        if(!((DragSlot.instance.transform.localPosition.x > baseRect.rect.xMin && DragSlot.instance.transform.localPosition.x < baseRect.rect.xMax &&
+           DragSlot.instance.transform.localPosition.y > baseRect.rect.yMin && DragSlot.instance.transform.localPosition.y < baseRect.rect.yMax)
+           ||
+           (DragSlot.instance.transform.localPosition.x > quickSlotBaseRect.rect.xMin && DragSlot.instance.transform.localPosition.x < quickSlotBaseRect.rect.xMax &&
+           DragSlot.instance.transform.localPosition.y > quickSlotBaseRect.transform.localPosition.y - quickSlotBaseRect.rect.yMax && DragSlot.instance.transform.localPosition.y < quickSlotBaseRect.transform.localPosition.y - quickSlotBaseRect.rect.yMin)))
+        {        
+
+            if (DragSlot.instance.dragSlot != null)
+            {
                 theInputNumber.Call();
+            }      
         }
         else
         {
@@ -148,11 +157,27 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     //슬롯 바꿀때
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("OnDROP 실행");
+      
         //오류방지
         if (DragSlot.instance.dragSlot != null)
         {          
             ChangeSlot();
+
+            //인벤토리에서 퀵슬롯 , 큌스롯에서 퀵슬롯
+            if(isQuickSlot)
+            {
+                theItemEffectDatabase.IsActivatedQuickSlot(quickSlotNumber);
+            }
+            else
+            {
+                //인벤토리-> 인벤토리, 퀵슬롯 -> 인벤토리
+                if (DragSlot.instance.dragSlot.isQuickSlot) // 큌슬롯 -> 인벤토리
+                {
+                    //활성화된 것인지 판단
+                    theItemEffectDatabase.IsActivatedQuickSlot(DragSlot.instance.dragSlot.quickSlotNumber);
+                }
+
+            }
         }
 
     }

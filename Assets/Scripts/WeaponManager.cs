@@ -79,32 +79,32 @@ public class WeaponManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(!isChangeWeapon)
-        {
-            if(Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                //무기 교체 실행(맨손)
-                StartCoroutine(ChangeWeaponCoroutine("HAND", "맨손"));
-            }
-            else if(Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                //무기교체 실행(서브머신)
-                StartCoroutine(ChangeWeaponCoroutine("GUN", "SubMachineGun1"));
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                //무기교체 실행(Axe)
-                StartCoroutine(ChangeWeaponCoroutine("AXE", "Axe"));
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                //무기교체 실행(Axe)
-                StartCoroutine(ChangeWeaponCoroutine("PICKAXE", "Pickaxe"));
-            }
-        }
-    }
+    //void Update()
+    //{
+    //    if(!isChangeWeapon)
+    //    {
+    //        if(Input.GetKeyDown(KeyCode.Alpha1))
+    //        {
+    //            //무기 교체 실행(맨손)
+    //            StartCoroutine(ChangeWeaponCoroutine("HAND", "맨손"));
+    //        }
+    //        else if(Input.GetKeyDown(KeyCode.Alpha2))
+    //        {
+    //            //무기교체 실행(서브머신)
+    //            StartCoroutine(ChangeWeaponCoroutine("GUN", "SubMachineGun1"));
+    //        }
+    //        else if (Input.GetKeyDown(KeyCode.Alpha3))
+    //        {
+    //            //무기교체 실행(Axe)
+    //            StartCoroutine(ChangeWeaponCoroutine("AXE", "Axe"));
+    //        }
+    //        else if (Input.GetKeyDown(KeyCode.Alpha4))
+    //        {
+    //            //무기교체 실행(Axe)
+    //            StartCoroutine(ChangeWeaponCoroutine("PICKAXE", "Pickaxe"));
+    //        }
+    //    }
+    //}
 
     public IEnumerator ChangeWeaponCoroutine(string _type, string _name)
     {
@@ -134,6 +134,8 @@ public class WeaponManager : MonoBehaviour
                 GunController.isActivate = false;
                 break;
             case "HAND":
+                if (QuickSlotController.go_HandItem != null) 
+                    Destroy(QuickSlotController.go_HandItem);
                 HandController.isActivate = false;
                 break;
             case "AXE":
