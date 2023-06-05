@@ -290,6 +290,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    public bool GetRun()
+    {
+        return isRun;
+    }
+
+
 
    
 }

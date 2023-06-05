@@ -5,17 +5,21 @@ using UnityEngine.AI;
 
 public class Animal : MonoBehaviour
 {
+
+    protected StatusController thePlayerStatus;
     [SerializeField] protected string animalName; //동물 이름
     [SerializeField] protected int hp; // 동물 체력
     [SerializeField] protected float walkSpeed;//걷기 스피드
     [SerializeField] protected float runSpeed;
-    [SerializeField] protected float turningSpeed; //회전 속도
+    //[SerializeField] protected float turningSpeed; //회전 속도
     protected float applySpped;
 
     protected bool isWalking;// 걷는지 판별
     protected bool isAction; //행동 중인지 판별
     protected bool isRunning;
     protected bool isDead;
+    protected bool isChasing;//추격중인디
+    protected bool isAttacking;//공격중
 
     [SerializeField] protected float walkTime; //걷기 시간
     [SerializeField] protected float waitTime; // 대기시간
@@ -31,22 +35,27 @@ public class Animal : MonoBehaviour
 
     protected AudioSource theAudio;
     protected NavMeshAgent nav;
+    protected FieldOfViewAngle theViewAngle;
+
     [SerializeField] protected AudioClip[] sound_normal; //일상 피그 사운드
     [SerializeField] protected AudioClip sound_hurt; //다칠때
     [SerializeField] protected AudioClip sound_Dead;
 
     private void Start()
     {
+        thePlayerStatus = FindObjectOfType<StatusController>();
+        theViewAngle = GetComponent<FieldOfViewAngle>();
         nav = GetComponent<NavMeshAgent>();
         currentTime = waitTime;
         theAudio = GetComponent<AudioSource>();
         isAction = true;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (!isDead)
         {
+            Debug.Log("+++++++ navPath $$$$ Path End Position: " + nav.pathEndPosition);
             Move();
             ElapseTime();
         }
@@ -68,8 +77,11 @@ public class Animal : MonoBehaviour
         {
             currentTime -= Time.deltaTime;
 
-            if (currentTime <= 0)
+            if (currentTime <= 0 && !isChasing && !isAttacking)
+            {
                 ReSet();
+            }
+           
         }
     }
 
@@ -79,7 +91,13 @@ public class Animal : MonoBehaviour
         isRunning = false;
         isAction = true;
         //언덕을 만나 왓다갓다 하는거 초기화
+        Debug.Log("+++++++ navPath Before Path End Position: " + nav.pathEndPosition);
+
+
         nav.ResetPath();
+        Debug.Log("+++++++ navPath After Path End Position: " + nav.pathEndPosition);
+
+
         nav.speed = walkSpeed;
         anim.SetBool("Walking", isWalking);
         anim.SetBool("Running", isRunning);
