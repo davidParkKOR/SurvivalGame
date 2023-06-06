@@ -30,7 +30,7 @@ public class HandController : CloseWeaponController
         {
             Debug.Log("¸Ô¾î¹ö¸²");
             currentCloseWeapon.anim.SetTrigger("Eat");
-            theQuickSlotController.EatItem();
+            theQuickSlotController.DecreaseSelectedItem();
         }
     }
 

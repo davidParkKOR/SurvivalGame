@@ -14,10 +14,13 @@ public class Inventory : MonoBehaviour
     private GameObject go_SlotParent;
     [SerializeField]
     private GameObject go_QuickSlotParent;
+    [SerializeField]
+    private QuickSlotController theQuickSlot;
 
     private Slot[] slots; // 인벤토리 슬롯들
     private Slot[] quickSlots;//퀵슬롯들
     private bool isNotPut;
+    private int slotNumber;
 
     void Start()
     {
@@ -61,6 +64,9 @@ public class Inventory : MonoBehaviour
         //퀵슬롯 먼저 넣기
         PutSlot(quickSlots, _item, _count);
 
+        if (!isNotPut)
+            theQuickSlot.IsActivatedQuickSlot(slotNumber);
+
         //인벤토리 넣기
         if(isNotPut)
             PutSlot(slots, _item, _count);
@@ -81,6 +87,7 @@ public class Inventory : MonoBehaviour
                     //슬롯에 아이템이 이미 있다면 갯수 증가
                     if (_slots[i].item.itemName == _item.itemName)
                     {
+                        slotNumber = i;
                         _slots[i].SetSlotCount(_count);
                         isNotPut = false;
                         return;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WeaponSway : MonoBehaviour
 {
+    public static bool isActivated = true;
     //기존위치
     private Vector3 originPos;
 
@@ -36,7 +37,7 @@ public class WeaponSway : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!Inventory.inventoryActivated)
+        if(!Inventory.inventoryActivated && isActivated)
         {
             //인벤토리 활성화시 웨폰 움직임 막기
             TrySway();

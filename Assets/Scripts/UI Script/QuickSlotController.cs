@@ -216,7 +216,7 @@ public class QuickSlotController : MonoBehaviour
     }
 
 
-    public void EatItem()
+    public void DecreaseSelectedItem()
     {
         CoolTimeReset();
         AppearReset();
@@ -232,5 +232,10 @@ public class QuickSlotController : MonoBehaviour
     public bool GetIsCoolTime()
     {
         return isCoolTime;
+    }
+
+    public Slot GetSelectedSlot()
+    {
+        return quickSlots[selectedSlot];
     }
 }

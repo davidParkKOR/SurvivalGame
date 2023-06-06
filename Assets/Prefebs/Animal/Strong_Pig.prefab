@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 3883993780850919031}
   - component: {fileID: 3883993780850919028}
   - component: {fileID: 3883993780850919027}
-  - component: {fileID: 3883993780850919025}
   - component: {fileID: 3883993780850919024}
   - component: {fileID: 3883993780850919026}
+  - component: {fileID: 182407160}
   m_Layer: 0
   m_Name: Strong_Pig
-  m_TagString: WeakAnimal
+  m_TagString: StrongAnimal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,7 +46,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3883993780850919029}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.1
   m_Drag: 0
   m_AngularDrag: 1
   m_UseGravity: 1
@@ -84,35 +84,6 @@ MonoBehaviour:
   targetMask:
     serializedVersion: 2
     m_Bits: 512
---- !u!114 &3883993780850919025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3883993780850919029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64a5044f5eb3953418d6a96325988f18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animalName: Pig
-  hp: 10
-  walkSpeed: 1
-  runSpeed: 10
-  turningSpeed: 0.5
-  walkTime: 5
-  waitTime: 4
-  runTime: 3
-  anim: {fileID: 8084312918776327691}
-  rigid: {fileID: 3883993780850919031}
-  boxCol: {fileID: 3883993780850919028}
-  sound_normal:
-  - {fileID: 8300000, guid: 326488c2aa83bf94891f72d9983a1702, type: 3}
-  - {fileID: 8300000, guid: 27505496045a2aa488d704d52d8f8f71, type: 3}
-  - {fileID: 8300000, guid: 8f8582b9e1419c9489c2f055e0b7b9d6, type: 3}
-  sound_hurt: {fileID: 8300000, guid: 2576a8e1fd281864ba888a6c4e83b676, type: 3}
-  sound_Dead: {fileID: 8300000, guid: 65140d1bef2dca24790253f9884c3a52, type: 3}
 --- !u!82 &3883993780850919024
 AudioSource:
   m_ObjectHideFlags: 0
@@ -240,6 +211,39 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &182407160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3883993780850919029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd4b6da5e15e8646bc2f76cc6c183e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animalName: PigWild
+  hp: 2
+  walkSpeed: 1
+  runSpeed: 4
+  isDead: 0
+  walkTime: 5
+  waitTime: 4
+  runTime: 5
+  anim: {fileID: 8084312918776327691}
+  rigid: {fileID: 3883993780850919031}
+  boxCol: {fileID: 3883993780850919028}
+  sound_normal: []
+  sound_hurt: {fileID: 8300000, guid: 2576a8e1fd281864ba888a6c4e83b676, type: 3}
+  sound_Dead: {fileID: 8300000, guid: 65140d1bef2dca24790253f9884c3a52, type: 3}
+  attackDamage: 30
+  attackDelay: 3
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 512
+  chaseTime: 4
+  chaseDelayTime: 0.5
 --- !u!1 &8084312918768934337
 GameObject:
   m_ObjectHideFlags: 0

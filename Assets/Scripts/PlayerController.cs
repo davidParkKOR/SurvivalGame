@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    static public bool isActivated = true;
     //원래 인스펙터창에서 보이지 않게됨
     //하지만 Serialized를 선언하면 보호수준은 유지되며 인스펙터 창에서 보이게됨 
 
@@ -73,18 +75,22 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        IsGround();
-        TryJump();
-        TryRun();
-        TryCrouch();
-        Move();
-        MoveCheck();
-
-        if(!Inventory.inventoryActivated)
+        if(isActivated)
         {
-            //인벤토리 활성화시 카메라 캐릭터 움직임 제한.
-            CameraRotation();
-            CharacterRoation();
+            IsGround();
+            TryJump();
+            TryRun();
+            TryCrouch();
+            Move();
+            MoveCheck();
+
+            if (!Inventory.inventoryActivated)
+            {
+                //인벤토리 활성화시 카메라 캐릭터 움직임 제한.
+                CameraRotation();
+                CharacterRoation();
+            }
+
         }
 
     }
@@ -103,7 +109,6 @@ public class PlayerController : MonoBehaviour
         isCrouch = !isCrouch;
         theCrosshair.CrouchingAnimation(isCrouch);
 
-
         if (isCrouch) 
         {
             applySpeed = crouchSpeed;
@@ -113,12 +118,12 @@ public class PlayerController : MonoBehaviour
         {
             applySpeed = walkSpped;
             applyCrouchPosY = originPosY;
-
         }
 
         StartCoroutine(CrouchCoroutine());
         //theCamera.transform.localPosition = new Vector3(theCamera.transform.localPosition.x, applyCrouchPosY, theCamera.transform.localPosition.z);
     }
+
 
     //부드러운 앉기 시도
     IEnumerator CrouchCoroutine()
@@ -128,7 +133,6 @@ public class PlayerController : MonoBehaviour
 
         while(_posY != applyCrouchPosY)
         {
-
             count++;
             _posY = Mathf.Lerp(_posY, applyCrouchPosY, 0.3f);
             theCamera.transform.localPosition = new Vector3(0, _posY, 0);
@@ -141,6 +145,7 @@ public class PlayerController : MonoBehaviour
 
         theCamera.transform.localPosition = new Vector3(0, applyCrouchPosY, 0f);
     }
+
 
     //지면 체크
     void IsGround()
