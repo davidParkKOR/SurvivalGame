@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -109,5 +110,55 @@ public class Inventory : MonoBehaviour
         }
 
         isNotPut = true;
+    }
+
+    //아이템을 찾으면 아이템이 몇개인지 확인
+    public int GetItemCount(string _itemName)
+    {
+        //퀵슬롯, 아이템슬롯
+        int temp = SearchSlotItem(slots, _itemName);
+
+        return temp != 0 ? temp : SearchSlotItem(quickSlots, _itemName);
+    }
+
+    private int SearchSlotItem(Slot[] _slots, string _itemName)
+    {
+        for (int i = 0; i < _slots.Length; i++)
+        {
+            if (_slots[i].item != null)
+            {
+                if (_itemName == _slots[i].item.itemName)
+                    return _slots[i].itemCount;
+            }
+
+        }
+
+        return 0;
+    }
+
+    //인벤토리에서 쓴 아이템 카운트 변경
+    public void SetItemCount(string _itemName, int _itemCount)
+    {
+        if(!ItemCountAdjust(slots, _itemName, _itemCount))
+        {
+            //false면 한번 더돌림 퀵슬롯으로
+            ItemCountAdjust(quickSlots, _itemName, _itemCount);
+        }
+    }
+
+    private bool ItemCountAdjust(Slot[] _slots, string _itemName, int _itemCount)
+    {
+        for (int i = 0; i < _slots.Length; i++)
+        {
+            if (_slots[i].item != null)
+            {
+                if (_itemName == _slots[i].item.itemName)
+                {
+                    _slots[i].SetSlotCount(-_itemCount);
+                    return true;
+                }
+            }
+        }
+         return false;
     }
 }
