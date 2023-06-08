@@ -136,6 +136,10 @@ public class WeaponManager : MonoBehaviour
             case "HAND":
                 if (QuickSlotController.go_HandItem != null) 
                     Destroy(QuickSlotController.go_HandItem);
+
+                if (HandController.currentKit != null)
+                    theHandController.Cancel();
+                
                 HandController.isActivate = false;
                 break;
             case "AXE":

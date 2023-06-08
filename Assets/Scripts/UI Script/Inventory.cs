@@ -51,11 +51,15 @@ public class Inventory : MonoBehaviour
 
     void OpenInventory()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         go_inventoryBase.SetActive(true);
     }
 
     void CloseInventory()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         go_inventoryBase.SetActive(false);
     }
 
@@ -78,8 +82,8 @@ public class Inventory : MonoBehaviour
 
     void PutSlot(Slot[] _slots, Item _item, int _count)
     {
-        //장비일경우에는 그냥 인벤토리 추가
-        if (Item.ItemType.EQUIPMENT != _item.itemType)
+        //장비, Kit일경우에는 그냥 인벤토리 추가
+        if (Item.ItemType.EQUIPMENT != _item.itemType && Item.ItemType.KIT != _item.itemType)
         {
             for (int i = 0; i < _slots.Length; i++)
             {
@@ -127,8 +131,13 @@ public class Inventory : MonoBehaviour
         {
             if (_slots[i].item != null)
             {
-                if (_itemName == _slots[i].item.itemName)
+                //대소문자 구분때문에 오류생길수 잇어서 
+                //전체 다 소문자로 변환시켜버림
+                if (_itemName.ToLower() == _slots[i].item.itemName.ToLower())
+                {
                     return _slots[i].itemCount;
+                }
+                  
             }
 
         }

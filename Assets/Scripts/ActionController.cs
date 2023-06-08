@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,8 @@ public class ActionController : MonoBehaviour
     private RaycastHit hitInfo;// 충돌체 정보
     private bool dissolveActivated = false; //고기 해체 가능할 시 (죽은 돼지 바라볼때)
     private bool isDissolving = false; //고기 해체 중에는 true (중복 고기 해체 방지)
+
+    bool lookComputer = false; //컴퓨터 바라볼 시 true
 
     //땅을 보고 있는데 아이템을 획특하면 안되니 이것 사용
     // 아이템 레이어에만 반응하도록 설정
@@ -28,6 +31,7 @@ public class ActionController : MonoBehaviour
     [SerializeField] private Transform tf_MeatDissolveTool;// 고기 해체 툴
     [SerializeField] private string sound_Meat;// 고기 소리 재생
     [SerializeField] QuickSlotController theQuickSlot;
+    [SerializeField] ComputerKit theComputer;
 
 
     private void Update()
@@ -36,7 +40,7 @@ public class ActionController : MonoBehaviour
         TryAction();
     }
 
-    //ㄸE키 누루는 부분
+    //E키 누루는 부분
     void TryAction()
     {
         if(Input.GetKeyDown(KeyCode.E))
@@ -45,6 +49,7 @@ public class ActionController : MonoBehaviour
             CanPickUp();
             CanMeat();
             CanDropFire();
+            CanComputerPowerOn();
         }
     }
 
@@ -79,6 +84,21 @@ public class ActionController : MonoBehaviour
                     DropAnItem(selectedSlot);                
                 }
             }        
+        }
+    }
+
+    void CanComputerPowerOn()
+    {
+        if (lookComputer)
+        {
+            if (hitInfo.transform != null)
+            {
+                if(!hitInfo.transform.GetComponent<ComputerKit>().isPowerOn)
+                {
+                    hitInfo.transform.GetComponent<ComputerKit>().PowerOn();
+                    InfoDisAppear();
+                }
+            }
         }
     }
 
@@ -117,6 +137,10 @@ public class ActionController : MonoBehaviour
             {
                 FireInfoAppear();
             }
+            else if (hitInfo.transform.tag == "Computer")
+            {
+                ComputerInfoAppear();
+            }
             else
                 InfoDisAppear();
         }
@@ -133,6 +157,18 @@ public class ActionController : MonoBehaviour
 
         string hitInfoItem = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName;
         actionText.text = hitInfoItem  + "획득" + "<color=yellow>" + "(E)" + "</color>";
+    }
+
+
+    void ComputerInfoAppear()
+    {
+        if(!hitInfo.transform.GetComponent<ComputerKit>().isPowerOn)
+        {
+            Reset();
+            lookComputer = true;
+            actionText.gameObject.SetActive(true);
+            actionText.text = "컴퓨터 가동" + "<color=yellow>" + "(E)" + "</color>";
+        }
     }
 
     void MeatInfoAppear()
@@ -170,6 +206,7 @@ public class ActionController : MonoBehaviour
         pickupActivated = false;
         dissolveActivated = false;
         fireLookActivated = false;
+        lookComputer = false;
         actionText.gameObject.SetActive(false); 
     }
 

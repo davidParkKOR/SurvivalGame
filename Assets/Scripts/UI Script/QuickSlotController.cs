@@ -178,9 +178,9 @@ public class QuickSlotController : MonoBehaviour
 
         if (quickSlots[selectedSlot].item != null)
         {
-            if (quickSlots[selectedSlot].item.itemType == Item.ItemType.EQUIPMENT)
+            if (quickSlots[selectedSlot].item.itemType == Item.ItemType.EQUIPMENT) //장비
                 StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(quickSlots[selectedSlot].item.WeaponType, quickSlots[selectedSlot].item.itemName));
-            else if (quickSlots[selectedSlot].item.itemType == Item.ItemType.USED)
+            else if (quickSlots[selectedSlot].item.itemType == Item.ItemType.USED || quickSlots[selectedSlot].item.itemType == Item.ItemType.KIT) //소모품
                 Changehand(quickSlots[selectedSlot].item);
             else
                 Changehand();
@@ -198,15 +198,21 @@ public class QuickSlotController : MonoBehaviour
 
         if(_item != null)
         {
-            StartCoroutine(HandItemCoroutine());
+
+            StartCoroutine(HandItemCoroutine(_item));
         }
     }
 
-    IEnumerator HandItemCoroutine()
+    IEnumerator HandItemCoroutine(Item _item)
     {
         HandController.isActivate = false;
         //isActivate가  true일떄까지 기다림 (무기교체의 마지막 과정)
-        yield return new WaitUntil(() => HandController.isActivate); 
+        yield return new WaitUntil(() => HandController.isActivate);
+
+        if (_item.itemType == Item.ItemType.KIT)
+            HandController.currentKit = _item;
+
+
         go_HandItem = Instantiate(quickSlots[selectedSlot].item.itemPrefab, tf_itemPos.position, tf_itemPos.rotation);
         go_HandItem.GetComponent<Rigidbody>().isKinematic = true;//중력에 영향 안ㅂ맏게함
         go_HandItem.GetComponent<BoxCollider>().enabled = false; //플레이어와 충돌 안하게 함
