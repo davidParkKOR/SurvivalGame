@@ -14,6 +14,7 @@ public class ActionController : MonoBehaviour
     private RaycastHit hitInfo;// 충돌체 정보
     private bool dissolveActivated = false; //고기 해체 가능할 시 (죽은 돼지 바라볼때)
     private bool isDissolving = false; //고기 해체 중에는 true (중복 고기 해체 방지)
+    private bool lookArchemyTable = false; //연금 테이블 바라볼 시
 
     bool lookComputer = false; //컴퓨터 바라볼 시 true
 
@@ -38,6 +39,8 @@ public class ActionController : MonoBehaviour
     {
         CheckAction();
         TryAction();
+
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 3, Color.red);
     }
 
     //E키 누루는 부분
@@ -50,6 +53,7 @@ public class ActionController : MonoBehaviour
             CanMeat();
             CanDropFire();
             CanComputerPowerOn();
+            CanArchemyTableOpen();
         }
     }
 
@@ -102,6 +106,18 @@ public class ActionController : MonoBehaviour
         }
     }
 
+    void CanArchemyTableOpen()
+    {
+        if (lookArchemyTable)
+        {
+            if (hitInfo.transform != null)
+            {
+                hitInfo.transform.GetComponent<ArchemyTable>().Window();
+                InfoDisAppear();                
+            }
+        }
+    }
+
 
 
 
@@ -141,6 +157,11 @@ public class ActionController : MonoBehaviour
             {
                 ComputerInfoAppear();
             }
+            else if (hitInfo.transform.tag == "ArchemyTable")
+            {
+                Debug.Log("Archemy : " + hitInfo.transform.tag);
+                ArchemyInfoAppear();
+            }
             else
                 InfoDisAppear();
         }
@@ -170,6 +191,20 @@ public class ActionController : MonoBehaviour
             actionText.text = "컴퓨터 가동" + "<color=yellow>" + "(E)" + "</color>";
         }
     }
+
+    void ArchemyInfoAppear()
+    {
+        //UI가 오픈되어 잇지 않을때만 등장하도록 함
+        if (!hitInfo.transform.GetComponent<ArchemyTable>().GetIsOpen())
+        {
+            Reset();
+            lookArchemyTable = true;
+            actionText.gameObject.SetActive(true);
+            actionText.text = "연금테이블 조작" + "<color=yellow>" + "(E)" + "</color>";
+        }
+
+    }
+
 
     void MeatInfoAppear()
     {
@@ -206,6 +241,7 @@ public class ActionController : MonoBehaviour
         pickupActivated = false;
         dissolveActivated = false;
         fireLookActivated = false;
+        lookArchemyTable = false;
         lookComputer = false;
         actionText.gameObject.SetActive(false); 
     }

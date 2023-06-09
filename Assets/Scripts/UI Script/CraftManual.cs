@@ -271,16 +271,14 @@ public class CraftManual : MonoBehaviour
 
     void OpenWindow()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        GameManager.isOpenCraftManual = true;
         isActivated = true;
         go_BaseUI.SetActive(true);
     }
 
     void CloseWindow()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameManager.isOpenCraftManual = false;
         isActivated = false;
         go_BaseUI.SetActive(false);
     }

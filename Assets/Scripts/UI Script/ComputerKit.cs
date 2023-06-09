@@ -37,8 +37,8 @@ public class ComputerKit : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
         theInventory = FindObjectOfType<Inventory>();
         theAudio = GetComponent<AudioSource>();
     }
@@ -52,16 +52,14 @@ public class ComputerKit : MonoBehaviour
     public void PowerOn()
     {
         //마우스 보이게 함
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        GameManager.isOpenCraftManual = true;
         isPowerOn = true;
         go_BaseUI.SetActive(true);
     }
 
     public void PowerOff()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameManager.isOpenCraftManual = false;
         isPowerOn = false;
         theToolTip.HideToolTip();
         go_BaseUI.SetActive(false);
