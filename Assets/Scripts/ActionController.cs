@@ -15,6 +15,7 @@ public class ActionController : MonoBehaviour
     private bool dissolveActivated = false; //고기 해체 가능할 시 (죽은 돼지 바라볼때)
     private bool isDissolving = false; //고기 해체 중에는 true (중복 고기 해체 방지)
     private bool lookArchemyTable = false; //연금 테이블 바라볼 시
+    private bool lookActivatedTrap = false; //가동된 함정을 바라볼시 true
 
     bool lookComputer = false; //컴퓨터 바라볼 시 true
 
@@ -54,6 +55,7 @@ public class ActionController : MonoBehaviour
             CanDropFire();
             CanComputerPowerOn();
             CanArchemyTableOpen();
+            CanReInstallTrap();
         }
     }
 
@@ -118,6 +120,18 @@ public class ActionController : MonoBehaviour
         }
     }
 
+    void CanReInstallTrap()
+    {
+        if (lookActivatedTrap)
+        {
+            if (hitInfo.transform != null)
+            {
+                hitInfo.transform.GetComponent<DeadTrap>().ReInstall();
+                InfoDisAppear();
+            }
+        }
+    }
+
 
 
 
@@ -159,8 +173,11 @@ public class ActionController : MonoBehaviour
             }
             else if (hitInfo.transform.tag == "ArchemyTable")
             {
-                Debug.Log("Archemy : " + hitInfo.transform.tag);
                 ArchemyInfoAppear();
+            }
+            else if (hitInfo.transform.tag == "Trap")
+            {
+                TrapInfoAppear();
             }
             else
                 InfoDisAppear();
@@ -205,6 +222,19 @@ public class ActionController : MonoBehaviour
 
     }
 
+    void TrapInfoAppear()
+    {
+        //UI가 오픈되어 잇지 않을때만 등장하도록 함
+        if (hitInfo.transform.GetComponent<DeadTrap>().GetIsActivated())
+        {
+            Reset();
+            lookActivatedTrap = true;
+            actionText.gameObject.SetActive(true);
+            actionText.text = "함정 재설치" + "<color=yellow>" + "(E)" + "</color>";
+        }
+
+    }
+
 
     void MeatInfoAppear()
     {
@@ -243,6 +273,7 @@ public class ActionController : MonoBehaviour
         fireLookActivated = false;
         lookArchemyTable = false;
         lookComputer = false;
+        lookActivatedTrap = false;
         actionText.gameObject.SetActive(false); 
     }
 
