@@ -19,48 +19,62 @@ public class Corsshair : MonoBehaviour
 
     public void WalkingAnimation(bool _flag)
     {
-        WeaponManager.currentWeaponAnim.SetBool("Walk", _flag);
-        animator.SetBool("Walking", _flag);
+        if(!GameManager.isWater)
+        {
+            WeaponManager.currentWeaponAnim.SetBool("Walk", _flag);
+            animator.SetBool("Walking", _flag);
+        }
     }
 
     public void RunningAnimation(bool _flag)
     {
-        WeaponManager.currentWeaponAnim.SetBool("Run", _flag);
-        animator.SetBool("Running", _flag);
+        if (!GameManager.isWater)
+        {
+            WeaponManager.currentWeaponAnim.SetBool("Run", _flag);
+            animator.SetBool("Running", _flag);
+        }
+
     }
 
     public void JumpingAnimation(bool _flag)
     {
-        animator.SetBool("Running", _flag);
+        if (!GameManager.isWater)
+            animator.SetBool("Running", _flag);
     }
 
     public void CrouchingAnimation(bool _flag)
     {
-        animator.SetBool("Crouching", _flag);
+        if (!GameManager.isWater)
+            animator.SetBool("Crouching", _flag);
     }
 
     public void FineSightAnimation(bool _flag)
     {
-        animator.SetBool("FineSight", _flag);
+        if (!GameManager.isWater)
+            animator.SetBool("FineSight", _flag);
     }
 
     public void FindAnimation()
     {
-        if(animator.GetBool("Walking"))
+        if (!GameManager.isWater)
         {
-            //WalkingFIre 실행
-            animator.SetTrigger("Walk_Fire");
+            if (animator.GetBool("Walking"))
+            {
+                //WalkingFIre 실행
+                animator.SetTrigger("Walk_Fire");
+            }
+            else if (animator.GetBool("Crouching"))
+            {
+                //Crouching Fire 실행
+                animator.SetTrigger("Crouch_Fire");
+            }
+            else
+            {
+                //가만히 있는 상태에서 쏘는것
+                animator.SetTrigger("Idle_Fire");
+            }
         }
-        else if(animator.GetBool("Crouching"))
-        {
-            //Crouching Fire 실행
-            animator.SetTrigger("Crouch_Fire");
-        }
-        else
-        {
-            //가만히 있는 상태에서 쏘는것
-            animator.SetTrigger("Idle_Fire");
-        }
+
     }
 
     public float GetAccuracy()

@@ -19,21 +19,18 @@ public class Pig : WeakAnimal
     private void Wait()
     {
         currentTime = waitTime;
-        Debug.Log("대기");
     }
 
     private void Eat()
     {
         currentTime = waitTime;
         anim.SetTrigger("Eat");
-        Debug.Log("풀뜯기");
     }
 
     private void Peek()
     {
         currentTime = waitTime;
         anim.SetTrigger("Peek");
-        Debug.Log("두리번");
     }
 
     protected override void ReSet()

@@ -314,8 +314,6 @@ public class ActionController : MonoBehaviour
         yield return new WaitForSeconds(1.8f);
 
         Animal animal = hitInfo.transform.GetComponent<Animal>();
-        Debug.Log(animal.GetItem().itemName) ;
-        Debug.Log(animal.itemNumber);
 
 
         theInventory.AcquireItem(hitInfo.transform.GetComponent<Animal>().GetItem(), hitInfo.transform.GetComponent<Animal>().itemNumber);

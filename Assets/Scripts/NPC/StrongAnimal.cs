@@ -52,7 +52,7 @@ public class StrongAnimal : Animal
             {
                 if (theViewAngle.View()) //눈앞에 있을때
                 {
-                    Debug.Log("공격시도");
+
                     StartCoroutine(AttackCoroutine());
 
                 }
@@ -84,7 +84,6 @@ public class StrongAnimal : Animal
 
         if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 3, targetMask))
         {
-            Debug.Log("플레이어 적중");
             thePlayerStatus.DecreaseHP(attackDamage);
 
         }

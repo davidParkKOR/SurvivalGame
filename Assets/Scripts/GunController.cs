@@ -58,7 +58,7 @@ public class GunController : MonoBehaviour
         if (isActivate)
         {
             GunFireRateCalc();
-            //TryFire();
+            TryFire();
             TryReload(); //R키 누르면 수동 재장전 되도록
             TryFineSight();
         }

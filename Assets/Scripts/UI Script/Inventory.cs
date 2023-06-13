@@ -8,6 +8,9 @@ public class Inventory : MonoBehaviour
     //인벤토리 띄워져있을때 마우스 클릭, 무기 사용 제한
     public static bool inventoryActivated = false;
 
+
+
+
     //필요 컴포넌트
     [SerializeField]
     private GameObject go_inventoryBase;
@@ -17,11 +20,26 @@ public class Inventory : MonoBehaviour
     private GameObject go_QuickSlotParent;
     [SerializeField]
     private QuickSlotController theQuickSlot;
+    [SerializeField]
+    private Item[] items;
 
     private Slot[] slots; // 인벤토리 슬롯들
     private Slot[] quickSlots;//퀵슬롯들
     private bool isNotPut;
     private int slotNumber;
+
+
+
+    public Slot[] GetSlots() { return slots; }
+    public void LoadToInven(int _arrayNum, string _itemName, int _itemNum) 
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i].itemName == _itemName) 
+                slots[_arrayNum].AddItem(items[i], _itemNum);
+        }
+    
+    }
 
     void Start()
     {
